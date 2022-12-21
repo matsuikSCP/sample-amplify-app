@@ -2,8 +2,10 @@ import logo from "./logo.svg";
 import "./App.css";
 // スタイルシートをインポート
 import "@aws-amplify/ui-react/styles.css";
-//  amplify本体のオブジェクト
-import { Amplify } from "aws-amplify";
+//  Amplify本体のオブジェクト、サインアウト用のAuthオブジェクト
+import { Amplify, Auth } from "aws-amplify";
+// 認証機能組み込みで使う
+import { Authenticator } from "@aws-amplify/ui-react";
 // UI関係のモジュールからwithAuthenticator関数をインポート
 import { withAuthenticator } from "@aws-amplify/ui-react";
 // 自動生成される情報をインポート
@@ -17,12 +19,12 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a className="App-link" href="https://reactjs.org" target="_blank" rel="noopener noreferrer">
-          Learn React
-        </a>
+        <h1>Sample React Native</h1>
+        <h2>
+          <a className="App-link" href="." onClick={Auth.signOut}>
+            Sign Out
+          </a>
+        </h2>
       </header>
     </div>
   );
