@@ -14,21 +14,30 @@ import aws_exports from "./aws-exports";
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
 
+//コピペだとサインアウトしてくれなかった（リロードが必要らしい？）
+const click = () => {
+  Auth.signOut();
+  window.location.reload();
+};
+
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Sample React Native</h1>
-        <h2>
-          <a className="App-link" href="." onClick={Auth.signOut}>
-            Sign Out
-          </a>
-        </h2>
-      </header>
-    </div>
+    <Authenticator>
+      <div className="App">
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+          <h1>Sample React Native</h1>
+          <h2>
+            <a className="App-link" href="." onClick={click}>
+              SignOut
+            </a>
+          </h2>
+        </header>
+      </div>
+    </Authenticator>
   );
 }
 
+export default App;
 // サインインしていたらAppをexport, 未サインインならサインインに必要なフォームをexport
-export default withAuthenticator(App);
+// export default withAuthenticator(App);
