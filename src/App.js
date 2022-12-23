@@ -31,7 +31,7 @@ function App() {
     setMsg(input);
   };
   useEffect(() => {
-    if (msg == "") {
+    if (msg === "") {
       setMsgs("no message");
     } else {
       const h = Math.floor(new Date().getHours() / 6);
@@ -39,11 +39,17 @@ function App() {
     }
   }, [msg]);
 
+  const [flag, setFlag] = useState(false);
+  const onChange_flg = (event) => {
+    setFlag(event.target.checked);
+  };
+
   return (
     <div className="py-4">
       <Header className="mb-4" />
       <p>＊これは、UIコンポーネントを利用した表示です。</p>
       <Now />
+      <hr />
       <div className="mx-0 my-3 row">
         <input type="text" className="form-control col" onChange={onChange} />
         <button className="btn btn-primary col-2" onClick={onClick}>
@@ -51,6 +57,21 @@ function App() {
         </button>
       </div>
       <Hello message={msgs} type="primary" />
+      <hr />
+      <div className="form-check">
+        <input className="form-check-input" type="checkbox" id="check1" onChange={onChange_flg} />
+        <label className="form-check-label" htmlFor="check1">
+          表示の切り替えボックス
+        </label>
+      </div>
+      {flag ? <AlertMessage title="チェックはON!" msg="チェックONのメッセージです！" /> : <BoxMessage title="チェックはOFF!" msg="チェックOFFのメッセージです！" />}
+      <hr />
+      <Message type="dark">
+        <p>タイトルです</p>
+        <p>これはサンプルで作ったメッセージ</p>
+        <p>これはコンテンツテキスト</p>
+      </Message>
+      <hr />
     </div>
   );
 }
@@ -61,6 +82,47 @@ function Hello(props) {
 
 function Now() {
   return <p className="bg-secondary text-dark bg-opaciry-25 p-3 my-3">現在は、{new Date().getHours()}時です。</p>;
+}
+
+function AlertMessage(props) {
+  return (
+    <div className="alert alert-primary">
+      <h3>{props.title}</h3>
+      {props.msg}
+    </div>
+  );
+}
+
+function BoxMessage(props) {
+  return (
+    <div className="card">
+      <div className="card-header">{props.title}</div>
+      <div className="card-body">{props.msg}</div>
+    </div>
+  );
+}
+
+// 子要素を取得するコンポーネント
+function Message(props) {
+  let first = null;
+  let data = null;
+  if (Array.isArray(props.children)) {
+    first = props.children[0];
+    data = props.children.slice(1, props.children.length);
+  } else {
+    first = props.children;
+    data = [<p>no data</p>];
+  }
+  return (
+    <div className={"alert alert-primary"}>
+      <ul className="list-group">
+        <div className="text-center">{first}</div>
+        {data.map((value) => (
+          <li className="list-group-item">{value}</li>
+        ))}
+      </ul>
+    </div>
+  );
 }
 
 // サインインしていたらAppをexport, 未サインインならサインインに必要なフォームをexport
