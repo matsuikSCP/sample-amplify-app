@@ -15,34 +15,32 @@ import { Header } from "./ui-components";
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
 
-//コピペだとサインアウトしてくれなかった（リロードが必要らしい？）
-const click = () => {
-  Auth.signOut();
-  window.location.reload();
-};
-
 function App() {
   return (
-    <Authenticator>
-      <div classNAme="py-4">
-        <Header className="mb-4" />
-        <p>＊これは、UIコンポーネントを利用した表示です。</p>
-      </div>
-      {/* <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Sample React Native</h1>
-        <h2>
-          <a className="App-link" href="." onClick={click}>
-            SignOut
-          </a>
-        </h2>
-      </header>
-    </div> */}
-    </Authenticator>
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>＊これは、UIコンポーネントを利用した表示です。</p>
+      <Hello message="サンプルのメッセージです。" type="primary" />
+      <Hello message="表示タイプの変更" type="dark" />
+      <Now />
+      <button className="btn btn-primary" onClick={onClick}>
+        Click me!
+      </button>
+    </div>
   );
 }
 
-export default App;
+function Hello(props) {
+  return <p className={"alert alert-" + props.type}>{props.message}</p>;
+}
+
+function Now() {
+  return <p className="bg-secondary text-dark bg-opaciry-25 p-3 my-3">現在は、{new Date().getHours()}時です。</p>;
+}
+
+function onClick() {
+  alert("クリック！！");
+}
+
 // サインインしていたらAppをexport, 未サインインならサインインに必要なフォームをexport
-// export default withAuthenticator(App);
+export default withAuthenticator(App);
