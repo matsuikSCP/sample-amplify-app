@@ -15,29 +15,10 @@ import { useState, useEffect } from "react";
 Amplify.configure(aws_exports);
 
 function App() {
-  const data = [
-    ["おやすみ", ",", "..."],
-    ["おはよう", ",", "!"],
-    ["こんにちは", ",", "さん。"],
-    ["こんばんは", ",", "さん。"],
-  ];
-  const [input, setInput] = useState("");
-  const [msg, setMsg] = useState(input);
-  const [msgs, setMsgs] = useState(msg);
-  const onChange = (event) => {
-    setInput(event.target.value);
+  const [msg, setMsg] = useState("ok");
+  const onClick = (value) => {
+    setMsg("You typed:" + value);
   };
-  const onClick = () => {
-    setMsg(input);
-  };
-  useEffect(() => {
-    if (msg === "") {
-      setMsgs("no message");
-    } else {
-      const h = Math.floor(new Date().getHours() / 6);
-      setMsgs(data[h][0] + msg + data[h][1]);
-    }
-  }, [msg]);
 
   const [flag, setFlag] = useState(false);
   const onChange_flg = (event) => {
@@ -50,13 +31,8 @@ function App() {
       <p>＊これは、UIコンポーネントを利用した表示です。</p>
       <Now />
       <hr />
-      <div className="mx-0 my-3 row">
-        <input type="text" className="form-control col" onChange={onChange} />
-        <button className="btn btn-primary col-2" onClick={onClick}>
-          Click
-        </button>
-      </div>
-      <Hello message={msgs} type="primary" />
+      <Message title="結果の表示" value={msg} />
+      <Form value="ok" onClick={onClick} />
       <hr />
       <div className="form-check">
         <input className="form-check-input" type="checkbox" id="check1" onChange={onChange_flg} />
@@ -65,19 +41,8 @@ function App() {
         </label>
       </div>
       {flag ? <AlertMessage title="チェックはON!" msg="チェックONのメッセージです！" /> : <BoxMessage title="チェックはOFF!" msg="チェックOFFのメッセージです！" />}
-      <hr />
-      <Message type="dark">
-        <p>タイトルです</p>
-        <p>これはサンプルで作ったメッセージ</p>
-        <p>これはコンテンツテキスト</p>
-      </Message>
-      <hr />
     </div>
   );
-}
-
-function Hello(props) {
-  return <p className={"alert alert-" + props.type}>{props.message}</p>;
 }
 
 function Now() {
@@ -102,25 +67,29 @@ function BoxMessage(props) {
   );
 }
 
-// 子要素を取得するコンポーネント
 function Message(props) {
-  let first = null;
-  let data = null;
-  if (Array.isArray(props.children)) {
-    first = props.children[0];
-    data = props.children.slice(1, props.children.length);
-  } else {
-    first = props.children;
-    data = [<p>no data</p>];
-  }
   return (
-    <div className={"alert alert-primary"}>
-      <ul className="list-group">
-        <div className="text-center">{first}</div>
-        {data.map((value) => (
-          <li className="list-group-item">{value}</li>
-        ))}
-      </ul>
+    <div className="alert alert-primary">
+      <h6>{props.title}</h6>
+      <p>{props.value}</p>
+    </div>
+  );
+}
+
+function Form(props) {
+  const [value, setValue] = useState(props.value);
+  const onChange = (event) => {
+    setValue(event.target.value);
+  };
+  const onClick = (evnt) => {
+    props.onClick(value);
+  };
+  return (
+    <div className="alert alert-info">
+      <input type="text" className="form-control" onChange={onChange} value={value} />
+      <button className="btn btn-primary" onClick={onClick}>
+        Click
+      </button>
     </div>
   );
 }
