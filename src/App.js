@@ -10,6 +10,7 @@ import { Authenticator } from "@aws-amplify/ui-react";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 // 自動生成される情報をインポート
 import aws_exports from "./aws-exports";
+import { Header } from "./ui-components";
 
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
@@ -23,17 +24,21 @@ const click = () => {
 function App() {
   return (
     <Authenticator>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h1>Sample React Native</h1>
-          <h2>
-            <a className="App-link" href="." onClick={click}>
-              SignOut
-            </a>
-          </h2>
-        </header>
+      <div classNAme="py-4">
+        <Header className="mb-4" />
+        <p>＊これは、UIコンポーネントを利用した表示です。</p>
       </div>
+      {/* <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <h1>Sample React Native</h1>
+        <h2>
+          <a className="App-link" href="." onClick={click}>
+            SignOut
+          </a>
+        </h2>
+      </header>
+    </div> */}
     </Authenticator>
   );
 }
