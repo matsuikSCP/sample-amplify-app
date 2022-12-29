@@ -16,23 +16,40 @@ import { Board, Person } from "./models";
 Amplify.configure(aws_exports);
 
 // const content1 = <BoardComponentCollection />;
-const content2 = <p>タブ2のコンテンツ</p>;
-const content3 = <p>タブ3のコンテンツ</p>;
+// const content2 = <p>タブ2のコンテンツ</p>;
+// const content3 = <p>タブ3のコンテンツ</p>;
 const content4 = <p>タブ4のコンテンツ</p>;
 
 function App() {
+  // List表示用コンポーネント
   const [content1, setContent1] = useState("");
   const [input, setInput] = useState("");
   const [find, setFind] = useState(input);
   const doChange = (event) => {
     setInput(event.target.value);
   };
-  const doFilter = (event) => {
-    setFind(input);
-  };
   useEffect(() => {
     ListBoard(input, setContent1, doChange);
-  }, [input]);
+  }, [input, find]);
+
+  //作成用
+  const [content2, setContent2] = useState("");
+  const [fmsg, setFmsg] = useState("");
+  const [femail, setFemail] = useState("");
+  const [fimg, setFimg] = useState("");
+  useEffect(() => {
+    CreateBoard(setContent2, fmsg, femail, fimg, setFmsg, setFemail, setFimg);
+  }, [fmsg, femail, fimg]);
+
+  //更新用
+  const [content3, setContent3] = useState("");
+  const [umsg, setUmsg] = useState("");
+  const [uimg, setUimg] = useState("");
+  const [seldata, setSeldata] = useState([]);
+  const [selbrd, setSelbrd] = useState(null);
+  useEffect(() => {
+    CreateBoard(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd);
+  }, [content1, umsg, uimg, selbrd, seldata]);
 
   return (
     <div className="py-4">
@@ -96,11 +113,72 @@ function ListBoard(input, setContent1, doChange) {
             <p className="text-end">posted by {value[0].email}.</p>
           </div>
         );
-        console.log(data);
         setContent1(<div>{data}</div>);
       });
     }
   });
+}
+
+function CreateBoard(setContent2, fmsg, femail, fimg, setFmsg, setFemail, setFimg) {
+  const onEmailChange = (event) => {
+    const v = event.target.value;
+    setFemail(v);
+  };
+  const onMsgChange = (event) => {
+    const v = event.target.value;
+    setFmsg(v);
+  };
+  const onImgChange = (event) => {
+    const v = event.target.value;
+    setFimg(v);
+  };
+  const onClick = () => {
+    DataStore.query(Person, (ob) => ob.email.eq(femail)).then((value) => {
+      if (value.length != 1) {
+        alert("アカウントが見つかりません。");
+        return;
+      }
+      const bd = new Board({
+        message: fmsg,
+        name: value[0].name,
+        image: fimg == "" ? null : fimg,
+        personID: value[0].id,
+      });
+      DataStore.save(bd).then(() => {
+        alert("メッセージを投稿しました。");
+      });
+    });
+  };
+  setContent2(
+    <div>
+      <h3>Create new Board</h3>
+      <div className="alert alert-primary my-3">
+        <div className="mb-2">
+          <label htmlFor="add_message" className="col-form-label">
+            Message
+          </label>
+          <input type="text" className="form-control" id="add_message" onChange={onMsgChange} />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="add_email" className="col-form-label">
+            Email
+          </label>
+          <input type="text" className="form-control" id="add_email" onChange={onEmailChange} />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="add_image" className="col-form-label">
+            Image(URL)
+          </label>
+          <input type="text" className="form-control" id="add_image" onChange={onImgChange} />
+        </div>
+        <div className="mb-2 text-center">
+          <button className="btn btn-primary" onClick={onClick}>
+            Click
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Now() {
