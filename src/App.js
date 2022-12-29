@@ -15,13 +15,9 @@ import { Board, Person } from "./models";
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
 
-// const content1 = <BoardComponentCollection />;
-// const content2 = <p>タブ2のコンテンツ</p>;
-// const content3 = <p>タブ3のコンテンツ</p>;
-const content4 = <p>タブ4のコンテンツ</p>;
-
 function App() {
   // List表示用コンポーネント
+  // const content1 = <BoardComponentCollection />;
   const [content1, setContent1] = useState("");
   const [input, setInput] = useState("");
   const [find, setFind] = useState(input);
@@ -48,8 +44,16 @@ function App() {
   const [seldata, setSeldata] = useState([]);
   const [selbrd, setSelbrd] = useState(null);
   useEffect(() => {
-    func3(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd);
+    UpdateBoard(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd);
   }, [content1, umsg, uimg, selbrd, seldata]);
+
+  //削除用
+  const [content4, setContent4] = useState("");
+  const [deldata, setDeldata] = useState("");
+  const [delbrd, setDelbrd] = useState("");
+  useEffect(() => {
+    DeleteBoard(setContent4, deldata, setDeldata, delbrd, setDelbrd);
+  }, [content1, deldata, delbrd]);
 
   return (
     <div className="py-4">
@@ -103,7 +107,11 @@ function App() {
 }
 
 function ListBoard(input, setContent1, doChange) {
-  DataStore.query(Board, Predicates.ALL, { sort: (ob) => ob.createdAt(SortDirection.DESCENDING), page: 0, limit: 100 }).then((values) => {
+  DataStore.query(Board, Predicates.ALL, {
+    sort: (ob) => ob.createdAt(SortDirection.DESCENDING),
+    page: 0,
+    limit: 100,
+  }).then((values) => {
     const data = [];
     for (let item of values) {
       DataStore.query(Person, (ob) => ob.id.eq(item.personID)).then((value) => {
@@ -173,7 +181,7 @@ function CreateBoard(setContent2, fmsg, femail, fimg, setFmsg, setFemail, setFim
         </div>
         <div className="mb-2 text-center">
           <button className="btn btn-primary" onClick={onClick}>
-            Click
+            投稿
           </button>
         </div>
       </div>
@@ -181,7 +189,7 @@ function CreateBoard(setContent2, fmsg, femail, fimg, setFmsg, setFemail, setFim
   );
 }
 
-function func3(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd) {
+function UpdateBoard(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd) {
   const onUMsgChange = (event) => {
     const v = event.target.value;
     setUmsg(v);
@@ -214,11 +222,14 @@ function func3(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, s
     });
   };
   const data = [
-    <option key="nodata" vaue="-">
+    <option key="nodata" value="-">
       -
     </option>,
   ];
-  DataStore.query(Board, Predicates.ALL, { sort: (ob) => ob.createdAt(SortDirection.DESCENDING), limit: 5 }).then((values) => {
+  DataStore.query(Board, Predicates.ALL, {
+    sort: (ob) => ob.createdAt(SortDirection.DESCENDING),
+    limit: 5,
+  }).then((values) => {
     for (let item of values) {
       data.push(
         <option key={item.id} value={item.id}>
@@ -250,9 +261,59 @@ function func3(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, s
         </div>
         <div className="mb-2 text-center">
           <button className="btn btn-primary" onClick={onUClick}>
-            Click
+            更新
           </button>
         </div>
+      </div>
+    </div>
+  );
+}
+
+function DeleteBoard(setContent4, deldata, setDeldata, delbrd, setDelbrd) {
+  const onDelChange = (event) => {
+    const v = event.target.value;
+    DataStore.query(Board, (ob) => ob.id.eq(v)).then((value) => {
+      if (value.length != 1) {
+        alert("見つかりませんでした。");
+        return;
+      }
+      setDelbrd(value[0]);
+    });
+  };
+  const onDClick = () => {
+    DataStore.delete(delbrd).then(() => {
+      alert("データを削除しました。");
+    });
+  };
+
+  const data = [
+    <option key="nodata" value="-">
+      -
+    </option>,
+  ];
+  DataStore.query(Board, Predicates.ALL, {
+    sort: (ob) => ob.createdAt(SortDirection.DESCENDING),
+    limit: 10,
+  }).then((values) => {
+    for (let item of values) {
+      data.push(
+        <option key={item.id} value={item.id}>
+          {item.message}
+        </option>
+      );
+    }
+    setDeldata(data);
+  });
+  setContent4(
+    <div>
+      <h3>Delete Board</h3>
+      <select className="form-select" onChange={onDelChange}>
+        {deldata}
+      </select>
+      <div className="my-2 text-center">
+        <button className="btn btn-primary" onClick={onDClick}>
+          削除
+        </button>
       </div>
     </div>
   );
