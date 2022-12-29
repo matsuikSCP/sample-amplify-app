@@ -1,0 +1,2505 @@
+﻿AWS Amplify Studioではじめるフロントエンド+バックエンド統合開発
+
+
+掲載リスト
+
+
+
+
+リスト1-1
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <AmplifySignOut />
+        <header className="App-header">
+          <img src={logo} className="App-logo" alt="logo" />
+        </header>
+        <h1>Sample App</h1>
+        <p>これは、サンプルで作成したアプリです。</p>
+      </div>
+    );
+  }
+}
+
+
+
+
+リスト1-2
+<p>これは、Web版Visual Studio Codeで修正したものです。</p>
+
+
+
+
+リスト2-1
+import logo from './logo.svg';
+import './App.css';
+
+
+function App() {
+  return (
+    <div className="App">
+        ……省略……
+    </div>
+  );
+}
+
+
+export default App;
+
+
+
+
+リスト2-2
+import logo from './logo.svg';
+import './App.css';
+import '@aws-amplify/ui-react/styles.css'; //☆
+import { Amplify } from 'aws-amplify'; //☆
+import { withAuthenticator } from '@aws-amplify/ui-react'; // ☆
+import aws_exports from './aws-exports'; //☆
+
+
+Amplify.configure(aws_exports); //☆
+
+
+function App() {
+  return (
+    <div className="App">
+        ……省略……
+    </div>
+  );
+}
+
+
+export default withAuthenticator(App); //☆
+
+
+
+
+リスト2-3
+import logo from './logo.svg';
+import './App.css';
+import { Amplify } from 'aws-amplify';
+import { Authenticator } from '@aws-amplify/ui-react'; //☆
+import '@aws-amplify/ui-react/styles.css';
+import aws_exports from './aws-exports';
+Amplify.configure(aws_exports);
+
+
+function App() {
+  return (
+    <Authenticator>
+    <div className="App">
+        ……省略……
+    </div>
+    </Authenticator>
+  );
+}
+
+
+export default App;
+
+
+
+
+リスト2-4
+import './App.css';
+import { Amplify, Auth } from 'aws-amplify'; //☆
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import aws_exports from './aws-exports';
+Amplify.configure(aws_exports);
+
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>Sample React app</h1>
+        <h2><a className="App-link" href="."
+          onClick={Auth.signOut}>
+          Sign Out
+        </a></h2>
+      </header>
+    </div>
+  );
+}
+
+
+export default withAuthenticator(App);
+
+
+
+
+リスト4-1
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import reportWebVitals from './reportWebVitals';
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
+
+
+reportWebVitals();
+
+
+
+
+リスト4-2
+import logo from './logo.svg';
+import './App.css';
+
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        ……省略……
+      </header>
+    </div>
+  );
+}
+
+
+export default App;
+
+
+
+
+リスト4-3
+import React from "react";
+import { getOverrideProps } from "@aws-amplify/ui-react/internal";
+import { Flex, Text } from "@aws-amplify/ui-react";
+
+
+export default function Header(props) {
+  const { label, overrides, ...rest } = props;
+  return (
+    <Flex
+      …属性の設定…
+      {...rest}
+    >
+      <Text
+        …属性の設定…
+      ></Text>
+      <Text
+        …属性の設定…
+      ></Text>
+    </Flex>
+  );
+}
+
+
+
+
+リスト4-4
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Web site created using create-react-app"
+    />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    <title>React App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+  </head>
+  <body class="container">
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
+
+
+
+
+リスト4-5
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { AmplifyProvider } from "@aws-amplify/ui-react"
+import awsconfig from './aws-exports'
+import { Amplify } from 'aws-amplify'
+
+
+Amplify.configure(awsconfig);
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(
+  <React.StrictMode>
+    <AmplifyProvider>
+      <App />
+    </AmplifyProvider>
+  </React.StrictMode>
+);
+
+
+
+
+リスト4-6
+import './App.css';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
+import { Header } from './ui-components';
+
+
+function App() {
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+    </div>
+  );
+}
+
+
+export default withAuthenticator(App);
+
+
+
+
+リスト4-7
+function App() {
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <Hello />
+      <Now />
+    </div>
+  );
+}
+
+
+function Hello() {
+  return (
+    <p className="border border-primary p-3 my-3">
+      こんにちは！
+    </p>
+  );
+}
+
+
+function Now() {
+  return (
+    <p className="bg-secondary text-dark bg-opacity-25 p-3 my-3">
+      現在は、{
+        new Date().getHours()
+      }時です。
+    </p>
+  );
+}
+
+
+
+
+リスト4-8
+function Hello(props) {
+  return (
+    <div className={"alert alert-" + props.type}>
+      {props.message}
+    </div>
+  )
+}
+
+
+function App() {
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <Hello message="サンプルのメッセージです。" type="primary" />
+      <Hello message="表示のタイプも変更できます。" type="dark" />
+    </div>
+  );
+}
+
+
+
+
+リスト4-9
+function onClick() {
+  alert("クリックした！");
+}
+
+
+function App() {
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <button className="btn btn-primary" onClick={onClick}>
+        Click me!
+      </button>
+    </div>
+  );
+}
+
+
+
+
+リスト4-10
+function App() {
+  let val = 0;
+  const onClick = ()=> {
+    val += 1;
+  }
+
+
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <div className="alert alert-primary">
+        Count: {val}.
+      </div>
+      <button className="btn btn-primary" onClick={onClick}>
+        Click
+      </button>
+    </div>
+  );
+}
+
+
+
+
+リスト4-11
+// import { useState } from 'react';
+
+
+function App() {
+  const [count, setCount] = useState(0);
+
+
+  const onClick = ()=> {
+    setCount(count + 1);
+  }
+
+
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <div className="alert alert-primary">
+        Count: {count}.
+      </div>
+      <button className="btn btn-primary" onClick={onClick}>
+        Click
+      </button>
+    </div>
+  );
+}
+
+
+
+
+リスト4-12
+function Hello(props) {
+  return (
+    <div className={"alert alert-" + props.type}>
+      {props.message}
+    </div>
+  )
+}
+
+
+function App() {
+  const [msg, setMsg] = useState("");
+  const [msgs, setMsgs] = useState([]);
+
+
+  const onChange = (event)=> {
+    setMsg(event.target.value);
+  }
+  const onClick = ()=> {
+    setMsgs([
+      "Hello, " + msg + "!",
+      "こんにちは、" + msg + "さん。"
+    ]);
+  }
+
+
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <div className="mx-0 my-3 row">
+        <input type="text" className="form-control col" 
+          onChange={onChange} />
+        <button className="btn btn-primary col-2" 
+          onClick={onClick}>Click</button>
+      </div>
+      <Hello message={msgs[0]} type="primary" />
+      <Hello message={msgs[1]} type="dark" />
+    </div>
+  );
+}
+
+
+
+
+リスト4-13
+// import { useState, useEffect } from 'react';
+
+
+function App() {
+  const data = [
+    ["おやすみ、", "..."],
+    ["おはよう、", "！"],
+    ["こんにちは、", "さん。"],
+    ["こんばんは、", "さん。"]
+  ]
+  const [input, setInput] = useState("");
+  const [msg, setMsg] = useState(input);
+  const [msgs, setMsgs] = useState(msg);
+
+
+  const onChange = (event)=> {
+    setInput(event.target.value);
+  }
+  const onClick = ()=> {
+    setMsg(input);
+  }
+  useEffect(()=>{
+    if (msg == "") {
+      setMsgs("no message.");
+    } else {
+      const h = Math.floor(new Date().getHours() / 6);
+      setMsgs(data[h][0] + msg + data[h][1]);      
+    }
+  }, [msg]);
+
+
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <div className="mx-0 my-3 row">
+        <input type="text" className="form-control col" 
+          onChange={onChange} />
+        <button className="btn btn-primary col-2" 
+          onClick={onClick}>Click</button>
+      </div>
+      <Hello message={msgs} type="primary" />
+    </div>
+  );
+}
+
+
+
+
+リスト4-14
+function useMessage(value) {
+  const data = [
+    ["おやすみ、", "..."],
+    ["おはよう、", "！"],
+    ["こんにちは、", "さん。"],
+    ["こんばんは、", "さん。"]
+  ]
+  const [msg, setMsg] = useState(value);
+
+
+  const setMsgs = (v)=> {
+    if (v == "") {
+      setMsg("no message.");
+    } else {
+      const h = Math.floor(new Date().getHours() / 6);
+      setMsg(data[h][0] + v + data[h][1]);      
+    }
+  }
+  return [msg, setMsgs];
+}
+
+
+function App() {
+  const [msg, setMsg] = useState("");
+  const [message, setMessage] = useMessage(msg);
+
+
+  const onChange = (event)=> {
+    setMsg(event.target.value);
+  }
+  useEffect(()=>{
+    setMessage(msg);
+  }, [msg]);
+
+
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <div className="mx-0 my-3 row">
+        <input type="text" className="form-control col" 
+          onChange={onChange} />
+      </div>
+      <Hello message={message} type="primary" />
+    </div>
+  );
+}
+
+
+
+
+リスト4-15
+function AlertMessage(props) {
+  return (
+    <div className="alert alert-primary">
+      <h3>{props.title}</h3>
+      {props.msg}
+    </div>
+  )
+}
+
+
+function BoxMessage(props) {
+  return (
+    <div className="card">
+      <div className="card-header">
+      {props.title}
+      </div>
+      <div className="card-body">
+      {props.msg}
+      </div>
+    </div>
+  )
+}
+
+
+function App() {
+  const [flag,setFlag] = useState(false);
+  const onChange = (event)=> {
+    setFlag(event.target.checked);
+  }
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <div className="form-check">
+        <input className="form-check-input" type="checkbox" 
+          id="check1" onChange={onChange} />
+        <label className="form-check-label" htmlFor="check1">
+          表示の切り替えチェックボックス
+        </label>
+      </div>
+      <hr />
+      {flag ?
+        <AlertMessage title="チェックはON!"
+          msg="チェックONのメッセージです！！"/>
+       :
+        <BoxMessage title="チェックはOFF"
+          msg="チェックOFFのメッセージです..."/>
+      }
+    </div>
+  );
+}
+
+
+
+
+リスト4-16
+function Message(props) {
+  return (
+    <div className={"alert alert-" + props.type}>
+      {props.children}
+    </div>
+  )
+}
+
+
+function App() {
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <Message type="dark">
+        <h1>メッセージ</h1>
+        <p>これはMessageコンポーネントの利用例です。</p>
+      </Message>
+      <Message type="info">
+        <ul>
+          <li>メッセージ1</li>
+          <li>メッセージ2</li>
+          <li>メッセージ3</li>
+        </ul>
+      </Message>
+    </div>
+  );
+}
+
+
+
+
+リスト4-17
+function Message(props) {
+  let first = null;
+  let data = null;
+  if (Array.isArray(props.children)) {
+    first = props.children[0];
+    data = props.children.slice(1, props.children.length);
+  } else {
+    first = props.children;
+    data = [<p> no data</p>];
+  }
+  return (
+    <div className="alert alert-primary">
+    <ul className="list-group">
+      <div className="text-center">{first}</div>
+      {data.map(value=> (
+        <li className="list-group-item">
+          {value}
+        </li>
+      ))}
+    </ul>
+    </div>
+  )
+}
+
+
+function App() {
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <Message>
+        <p>タイトルです</p>
+        <p>これはサンプルで作ったメッセージです。</p>
+        <p>これはコンテンツのテキストです。</p>
+      </Message>
+    </div>
+  );
+}
+
+
+
+
+リスト4-18
+function Message(props) {
+  return (
+    <div className="alert alert-primary">
+      <h6>{props.title}</h6>
+      <p>{props.value}</p>
+    </div>
+  )
+}
+
+
+function Form(props) {
+  const [value,setValue] = useState(props.value);
+  const onChange = (event)=> {
+    setValue(event.target.value);
+  }
+  const onClick = (event)=> {
+    props.onClick(value);
+  }
+  return (
+    <div className="alert alert-info">
+      <input type="text" className="form-control"
+        onChange={onChange} value={value} />
+      <button className="btn btn-primary"
+        onClick={onClick}>
+        Click
+      </button>
+    </div>
+  );
+}
+
+
+function App() {
+  const [msg, setMsg] = useState("ok");
+  const onClick = (value)=> {
+    setMsg("You typed: " + value);
+  }
+  return (
+    <div className="py-4">
+      <Header className="mb-4" />
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <Message title="結果の表示" value={msg} />
+      <Form value="ok" onClick={onClick}/>
+    </div>
+  );
+}
+
+
+
+
+リスト5-1
+import './App.css';
+import '@aws-amplify/ui-react/styles.css';
+import { Auth } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Header } from "./ui-components";
+
+
+const content1 = <p>タブ1のコンテンツ</p>;  // ①
+const content2 = <p>タブ2のコンテンツ</p>;  // ②
+const content3 = <p>タブ3のコンテンツ</p>;  // ③
+const content4 = <p>タブ4のコンテンツ</p>;  // ④
+
+
+function App() {
+  return (
+    <div>
+      <Header className="my-4"/>
+      <p>※これは、UIコンポーネントを利用した表示です。</p>
+      <ul className="nav nav-tabs">
+        <li className="nav-item">
+        <a href="#tab1" className="nav-link active" 
+          data-bs-toggle="tab">List</a>
+        </li>
+        <li className="nav-item">
+        <a href="#tab2" className="nav-link" 
+          data-bs-toggle="tab">Create</a>
+        </li>
+        <li className="nav-item">
+        <a href="#tab3" className="nav-link" 
+          data-bs-toggle="tab">Update</a>
+        </li>
+        <li className="nav-item">
+        <a href="#tab4" className="nav-link" 
+          data-bs-toggle="tab">Delete</a>
+        </li>
+      </ul>
+      <div className="tab-content">
+        <div id="tab1" className="my-2 tab-pane active">
+          { content1 }
+        </div>
+        <div id="tab2" className="my-2 tab-pane">
+          { content2 }
+        </div>
+        <div id="tab3" className="my-2 tab-pane">
+          { content3 }
+        </div>
+        <div id="tab4" className="my-2 tab-pane">
+          { content4 }
+        </div>
+      </div>
+      <p className="my-2">
+        <a className="btn btn-primary" href="."
+        onClick={Auth.signOut}>
+        Sign Out
+      </a></p>
+    </div>
+  );
+}
+
+
+export default withAuthenticator(App);
+
+
+
+
+リスト5-2
+// import { Header , BoardComponentCollection } from "./ui-components";
+
+
+const content1 = <BoardComponentCollection />;
+
+
+
+
+リスト5-3
+import './App.css';
+import '@aws-amplify/ui-react/styles.css';
+import { useState } from 'react';
+import { Auth } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Header } from "./ui-components";
+import { DataStore } from 'aws-amplify';
+import { Board } from './models';
+ 
+const content2 = <p>タブ2のコンテンツ</p>;
+const content3 = <p>タブ3のコンテンツ</p>;
+const content4 = <p>タブ4のコンテンツ</p>;
+
+
+function App() {
+  const [content1, setContent1] = useState(); //①タブ1の表示
+
+
+  DataStore.query(Board).then(values=>{
+    const data = []
+    for(let item of values) {
+      data.push(
+      <li key={item.id} className="list-group-item">
+        {item.message}({item.name})
+      </li>
+      )
+    }
+    setContent1(<ol className="my-3 list-group">
+      {data}
+    </ol>);
+  });
+  
+  return (…略…);
+}
+
+
+
+
+リスト5-4
+// import { Header, BoardComponent } from './ui-components';
+
+
+function App() {
+  const [content1, setContent1] = useState(null);
+  
+  DataStore.query(Board).then(values=>{
+    const data = []
+    for(let item of values) {
+      data.push(
+        <BoardComponent
+          board={item}
+          key={item.id}
+        />
+      )
+    }
+    setContent1(<div>
+      {data}
+    </div>);
+  });
+  
+  return (…略…);
+}
+
+
+
+
+リスト5-5
+// import { useState, useEffect } from 'react';
+
+
+function App() {
+  // 「List」タブ用のフック
+  const [content1, setContent1] = useState("");
+  const [input, setInput] = useState("");
+  const [find, setFind] = useState(input);
+  // 「List」タブ用のイベント関数
+  const doChange = (event)=> {
+    setInput(event.target.value);
+  }
+  const doFilter = (event)=> {
+    setFind(input);
+  }
+  // 「List」タブのBoard表示
+  useEffect(()=> {
+    DataStore.query(Board, ob=>ob.name("contains", find)).then(values=>{
+      const data = []
+      for(let item of values) {
+        data.push(
+          <BoardComponent
+            board={item}
+            key={item.id}
+          />
+        )
+      }
+      setContent1(
+        <div>
+          <div className="mx-0 my-3 row">
+            <input type="text" className="form-control col" onChange={doChange} />
+            <button className="btn btn-primary col-2" 
+              onClick={doFilter}>Click</button>
+          </div>
+          {data}
+        </div>);
+    });
+  },[input, find]);
+
+
+  return (…略…);
+}
+
+
+
+
+リスト5-6――AND検索
+DataStore.query(Board, ob=>ob.and(ob2=>ob2.name("contains", find)
+  .message("contains", find))).then(…略…);
+
+
+
+
+リスト5-7――OR検索
+DataStore.query(Board, ob=>ob.or(ob2=>ob2.name("contains", find)
+  .message("contains", find))).then(…略…);
+
+
+
+
+リスト5-8
+// import { DataStore, Predicates, SortDirection } from 'aws-amplify'
+
+
+function func1(input, setContent1, doChange) {
+  DataStore.query(Board, Predicates.ALL, {
+    sort:ob=> ob.createdAt(SortDirection.DESCENDING)
+  }).then(values=>{
+    const data = []
+    for(let item of values) {
+      data.push(
+        <BoardComponent
+          board={item}
+          key={item.id}
+        />
+      )
+    }
+    setContent1(
+      <div>
+        {data}
+      </div>);
+  });
+}
+
+
+function App() {
+  // 「List」タブ用のフック・関数
+  const [content1, setContent1] = useState("");
+  const [input, setInput] = useState(0);
+  const doChange = (event)=> {
+    setInput(event.target.value);
+  }
+  useEffect(()=> {
+    func1(input, setContent1, doChange);
+  },[input]);
+
+
+  // コンポーネントの表示（変更なし）
+  return (…略…);
+}
+
+
+
+
+リスト5-9
+DataStore.query(Board, Predicates.ALL, {
+  sort:ob=> ob.name(SortDirection.ASCENDING)
+    .createdAt(SortDirection.DESCENDING)
+})
+
+
+
+
+リスト5-10
+function func1(input, setContent1, doChange) {
+  DataStore.query(Board, Predicates.ALL, {
+    sort:ob=> ob.createdAt(SortDirection.DESCENDING),
+    page: +input,
+    limit: 3
+  }).then(values=>{
+    const data = []
+    for(let item of values) {
+      data.push(
+        <BoardComponent
+          board={item}
+          key={item.id}
+        />
+      )
+    }
+    setContent1(
+      <div>
+        <input type="number" className="my-2 form-control"
+          onChange={doChange} />
+        {data}
+      </div>);
+  });
+}
+
+
+
+
+リスト5-11
+// import { Board, Person } from './models';
+
+
+function func1(input, setContent1, doChange) {
+  DataStore.query(Board, Predicates.ALL, {
+    sort:ob=> ob.createdAt(SortDirection.DESCENDING),
+  }).then(values=>{
+    const data = []
+    for(let item of values) {
+      DataStore.query(Person, ob=>ob.id('eq', item.personID)).then(value=>{
+        data.push(
+          <div key={item.id}>
+          <BoardComponent
+            board={item}
+          />
+          <p className="text-end">posted by {value[0].email}.</p>
+          </div>
+        );   
+        setContent1(
+          <div>
+            {data}
+          </div>
+        );
+      });
+    }
+  });
+}
+
+
+
+
+リスト5-12
+const content2 = <p>タブ2のコンテンツ</p>;
+
+
+
+
+リスト5-13
+const [content2, setContent2] = useState("");
+const [fmsg, setFmsg] = useState("");
+const [femail, setFemail] = useState("");
+const [fimg, setFimg] = useState("");
+useEffect(()=> {
+  func2(setContent2,fmsg,femail,fimg,setFmsg,setFemail,setFimg);
+},[fmsg,femail,fimg]);
+
+
+
+
+リスト5-14
+function func2(setContent2,fmsg,femail,fimg,setFmsg,setFemail,setFimg) {
+  const onEmailChange = (event)=> {
+    const v = event.target.value;
+    setFemail(v);
+  }
+  const onMsgChange = (event)=> {
+    const v = event.target.value;
+   setFmsg(v);
+  }
+  const onImgChange = (event)=> {
+    const v = event.target.value;
+    setFimg(v);
+  }
+  
+  const onClick = ()=> {
+    DataStore.query(Person, ob=>ob.email('eq',femail)).then(value=>{
+      if (value.length != 1) {
+        alert("アカウントが見つかりませんでした。");
+        return;
+      }
+      const bd = new Board({
+        message:fmsg,
+        name:value[0].name,
+        image:fimg == "" ? null : fimg,
+        personID:value[0].id
+      });
+      
+      DataStore.save(bd).then(()=>{
+        alert("メッセージを投稿しました。");
+      });
+    });
+  }
+  
+  setContent2(
+    <div>
+      <h3>Create new Board:</h3>
+      <div className="alert alert-primary my-3">
+        <div className="mb-2">
+          <label htmlFor="add_message" className="col-form-label">
+            Message</label>
+          <input type="text" className="form-control"
+            id="add_message" onChange={onMsgChange}/>
+        </div>
+        <div className="mb-2">
+          <label htmlFor="add_email" className="col-form-label">
+            Email</label>
+          <input type="text" className="form-control"
+            id="add_email" onChange={onEmailChange}/>
+        </div>
+        <div className="mb-2">
+          <label htmlFor="add_image" className="col-form-label">
+            Image(URL)</label>
+          <input type="text" className="form-control" 
+            id="add_image" onChange={onImgChange}/>
+        </div>
+        <div className="mb-2 text-center">
+          <button className="btn btn-primary" onClick={onClick}>
+            Click</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+リスト5-15
+const content3 = <p>タブ3のコンテンツ</p>;
+
+
+
+
+リスト5-16
+const [content3, setContent3] = useState("");
+const [umsg, setUmsg] = useState("");
+const [uimg, setUimg] = useState("");
+const [seldata, setSeldata] = useState([]);
+const [selbrd, setSelbrd] = useState(null);
+
+
+useEffect(()=> {
+  func3(setContent3,seldata,setSeldata,umsg,uimg,setUmsg,setUimg,selbrd,setSelbrd);
+},[content1,umsg,uimg,selbrd,seldata]);
+
+
+
+
+リスト5-17
+function func3(setContent3,seldata,setSeldata,umsg,uimg,setUmsg,setUimg,selbrd,setSelbrd) {
+  const onUMsgChange = (event)=> {
+    const v = event.target.value;
+    setUmsg(v);
+  }
+  const onUImgChange = (event)=> {
+    const v = event.target.value;
+    setUimg(v);
+  }
+  const onSelChange = (event)=> {
+    const v = event.target.value;
+    DataStore.query(Board, ob=>ob.id('eq',v)).then(value=>{
+      if (value.length != 1) {
+        alert("見つかりませんでした。");
+        return;
+      }
+      setSelbrd(value[0]);
+      setUmsg(value[0].message);
+      setUimg(value[0].image);
+    });
+  }
+  
+  const onUClick = ()=> {
+      DataStore.save(
+        Board.copyOf(selbrd, updated => {
+          updated.message = umsg;
+          updated.image = uimg == "" ? null : uimg;
+        })
+      ).then(()=>{
+        alert("メッセージを更新しました。");
+      });
+  }
+  
+  const data = [
+    <option key="nodata" vaue="-">-</option>
+  ];
+  DataStore.query(Board, Predicates.ALL, {
+    sort:ob=> ob.createdAt(SortDirection.DESCENDING),
+    limit: 5,
+  }).then(values=>{
+    for(let item of values) {
+      data.push(
+        <option key={item.id} value={item.id}>{item.message}</option>
+      );
+    }
+    setSeldata(data);
+  });
+  
+  setContent3(
+    <div>
+      <h3>Update new Board:</h3>
+      <select className="form-select" onChange={onSelChange}>
+        {seldata}
+      </select>
+      <div className="alert alert-primary my-3">
+        <div className="mb-2">
+          <label htmlFor="edit_message" className="col-form-label">
+            Message</label>
+          <input type="text" className="form-control" value={umsg}
+            id="edit_message" onChange={onUMsgChange}/>
+        </div>
+        <div className="mb-2">
+          <label htmlFor="edit_image" className="col-form-label">
+            Image(URL)</label>
+          <input type="text" className="form-control" value={uimg}
+            id="edit_image" onChange={onUImgChange}/>
+        </div>
+        <div className="mb-2 text-center">
+          <button className="btn btn-primary" onClick={onUClick}>
+            Click</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+リスト5-18
+const content4 = <p>タブ4のコンテンツ</p>;
+
+
+
+
+リスト5-19
+const [content4, setContent4] = useState("");
+const [deldata, setDeldata] = useState([]);
+const [delbrd, setDelbrd] = useState(null);
+
+
+useEffect(()=> {
+  func4(setContent4,deldata,setDeldata,delbrd,setDelbrd);
+},[content1,delbrd,deldata]);
+
+
+
+
+リスト5-20
+function func4(setContent4,deldata,setDeldata,delbrd,setDelbrd) {
+  const onDelChange = (event)=> {
+    const v = event.target.value;
+    DataStore.query(Board, ob=>ob.id('eq',v)).then(value=>{
+      if (value.length != 1) {
+        alert("見つかりませんでした。");
+        return;
+      }
+      setDelbrd(value[0]);
+    });
+  }
+  
+  const onDClick = ()=> {
+    DataStore.delete(delbrd).then(()=>{
+      alert("メッセージを削除しました。");
+    });
+  }
+  
+  const data = [
+    <option key="nodata" vaue="-">-</option>
+  ];
+
+
+  DataStore.query(Board, Predicates.ALL, {
+    sort:ob=> ob.createdAt(SortDirection.ASCENDING),
+    limit: 10,
+  }).then(values=>{
+    for(let item of values) {
+      data.push(
+        <option key={item.id} value={item.id}>{item.message}</option>
+      );
+    }
+    setDeldata(data);
+  });
+  
+  setContent4(
+    <div>
+      <h3>Delete Board:</h3>
+      <select className="form-select" onChange={onDelChange}>
+        {deldata}
+      </select>
+      <div className="my-2 text-center">
+        <button className="btn btn-primary" onClick={onDClick}>
+          Click</button>
+      </div>
+    </div>
+  );
+}
+
+
+
+
+リスト6-1
+query MyQuery {
+  listBoards
+}
+
+
+
+
+リスト6-2
+query MyQuery {
+  listBoards {
+    items
+  }
+}
+
+
+
+
+リスト6-3
+query MyQuery {
+  listBoards {
+    items {
+      id
+      name
+      image
+      createdAt
+    }
+  }
+}
+
+
+
+
+リスト6-4
+{
+  "data": {
+    "listBoards": {
+      "items": []
+    }
+  }
+}
+
+
+
+
+リスト6-5
+mutation MyMutation {
+  createPerson(
+    input: {age: 整数, 
+      email: メールアドレス, 
+      name: 名前, 
+      tel: 電話番号}
+  ) {
+    id
+  }
+}
+
+
+
+
+リスト6-6
+{
+  "data": {
+    "createPerson": {
+      "id": 作成されたデータのID値
+    }
+  }
+}
+
+
+
+
+リスト6-7
+type Person @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  email: AWSEmail
+  age: Int
+  tel: AWSPhone
+  Boards: [Board] @hasMany(indexName: "byPerson", fields: ["id"])
+}
+
+
+type Board @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  message: String!
+  name: String
+  image: String
+  personID: ID! @index(name: "byPerson")
+}
+
+
+
+
+リスト6-8
+import { Auth, API, graphqlOperation } from 'aws-amplify';
+
+
+
+
+リスト6-9
+import { listPeople, listBoards } from './graphql/queries';
+
+
+
+
+リスト6-10
+function func1(input, setContent1, doChange) {
+  API.graphql(graphqlOperation(listBoards)).then(values=> {
+    const data = values.data.listBoards.items;
+    setContent1(
+      <pre>{JSON.stringify(data,null,2)}</pre>
+    );
+  });
+}
+
+
+
+
+リスト6-11
+function func1(input, setContent1, doChange) {
+  API.graphql(graphqlOperation(listBoards)).then(values=> {
+    const data = values.data.listBoards.items;
+    const arr = []
+    for(let item of data) {
+      arr.push(
+        <BoardComponent board={item} key={item.id} />
+      )
+    }
+    setContent1(<div>{arr}</div>);
+  });
+}
+
+
+
+
+リスト6-12
+export const listBoards = /* GraphQL */ `
+  query ListBoards(
+    $filter: ModelBoardFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listBoards(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        message
+        name
+        image
+        personID
+        createdAt
+        updatedAt
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+
+
+
+
+リスト6-13
+type Hello @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  value: String
+}
+
+
+
+
+リスト6-14
+export hello = `
+  query Hello(
+    $pram1: Int
+    $param2: String
+  ) {
+    hello(param1:$param1, param2:$param2) {
+      items {
+        id
+        value
+      }
+      nextToken
+      startedAt
+    }
+  }
+`;
+
+
+
+
+リスト6-15
+query HelloQuery {
+  hello(
+    param1: 123,
+    param2:"Hello"
+  ) {
+    id
+    value
+  }
+}
+
+
+
+
+リスト6-16
+// import { hello } from './graphql/queries';
+
+
+const opt = {
+  param1: 123,
+  param2: "Hello"
+}
+API.graphql(graphqlOperation(hello, opt)).then(values=> {
+  ……略……
+});
+
+
+
+
+リスト6-17
+function func1(input, setContent1, doChange) {
+  const opt = {
+    limit:10, 
+    filter: {name: {eq: "はなこ"}},
+  };
+  API.graphql(graphqlOperation(listBoards,opt)).then(values=> {
+    console.log(values);
+    const data = values.data.listBoards.items;
+    const arr = []
+    for(let item of data) {
+      arr.push(
+        <BoardComponent board={item} key={item.id}/>
+      )
+    }
+    setContent1(<div>{arr}</div>);
+  });
+}
+
+
+
+
+リスト6-18
+type Board @model @searchable @auth(rules: [{allow: public}]) {
+  id: ID!
+  message: String!
+  name: String
+  image: String
+  personID: ID! @index(name: "byPerson")
+  createdAt: AWSDateTime!
+}
+
+
+
+
+リスト6-19
+export const searchBoards = /* GraphQL */ `
+  query SearchBoards(
+    $filter: SearchableBoardFilterInput
+    $sort: [SearchableBoardSortInput]
+    $limit: Int
+    $nextToken: String
+    $from: Int
+    $aggregates: [SearchableBoardAggregationInput]
+  ) {
+    searchBoards(
+      filter: $filter
+      sort: $sort
+      limit: $limit
+      nextToken: $nextToken
+      from: $from
+      aggregates: $aggregates
+    ) {
+      items {
+        id
+        …プロパティ…
+      }
+      nextToken
+      total
+      aggregateItems {…略…}
+    }
+  }
+`;
+
+
+
+
+リスト6-20
+query MyQuery {
+  searchBoards(
+    filter: フィルター
+    sort: ソート
+    limit: 個数
+    nextToken: トークン
+    from: 取得位置
+    aggregates: 集計クエリ設定
+  ) {
+    items {
+      id
+      …プロパティ…
+    }
+    nextToken
+    total
+    aggregateItems {…略…}
+  }
+}
+
+
+
+
+リスト6-21
+function func1(input, setContent1, doChange) {
+  const opt = {
+    sort : { 
+        field: 'createdAt',
+        direction: 'desc'
+    },
+    limit : 5
+  };
+  API.graphql(graphqlOperation(searchBoards,opt)).then(values=> {
+    console.log(values);
+    const data = values.data.searchBoards.items;
+    const arr = []
+    for(let item of data) {
+      arr.push(
+        <BoardComponent board={item} key={item.id}/>
+      )
+    }
+    setContent1(<div>{arr}</div>);
+  });
+}
+
+
+
+
+リスト6-22
+const onClick = ()=> {
+  DataStore.query(Person, ob=>ob.email('eq',femail)).then(value=>{
+    if (value.length != 1) {
+      alert("アカウントが見つかりませんでした。");
+      return;
+    }
+    const bd = new Board({
+      message:fmsg,
+      email:value[0].email,
+      name:value[0].name,
+      image:fimg == "" ? null : fimg,
+      personID:value[0].id,
+      createdAt: new Date().toISOString() //☆
+    });
+    DataStore.save(bd).then(()=>{
+      alert("メッセージを投稿しました。");
+    });
+  });
+}
+
+
+
+
+リスト6-23
+import { createBoard, updateBoard, deleteBoard } from './graphql/mutations';
+
+
+
+
+リスト6-24
+export const createBoard = /* GraphQL */ `
+  mutation CreateBoard(
+    $input: CreateBoardInput!
+    $condition: ModelBoardConditionInput
+  ) {
+    createBoard(input: $input, condition: $condition) {
+      id
+      …略…
+    }
+  }
+`;
+
+
+
+
+リスト6-25
+const onClick = ()=> {
+  const opt = {
+    filter: {email: {eq: femail}}
+  }
+  // emailがfemailのPersonを取得する
+  API.graphql(graphqlOperation(listPeople,opt)).then(value=> {
+    const values = value.data.listPeople.items;
+    if (values.length != 1) {
+      alert("アカウントが見つかりませんでした。");
+      return;
+    }
+    // 保存するデータの準備
+    const data = {
+      input:{
+        message:fmsg,
+        name:values[0].name,
+        image:fimg == "" ? null : fimg,
+        personID:values[0].id,
+        createdAt: new Date().toISOString()
+      }
+    }
+    // Boardデータを作成保存する
+    API.graphql(graphqlOperation(createBoard,data)).then(()=> {
+      alert("メッセージを投稿しました。");
+    });
+  });
+}
+
+
+
+
+リスト6-26
+export const updateBoard = /* GraphQL */ `
+  mutation UpdateBoard(
+    $input: UpdateBoardInput!
+    $condition: ModelBoardConditionInput
+  ) {
+    updateBoard(input: $input, condition: $condition) {
+      id
+      …略…
+    }
+  }
+`;
+
+
+
+
+リスト6-27
+const onUClick = ()=> {
+  const data = {
+    input:{
+      id: selbrd.id,
+      message:umsg,
+      image:uimg == "" ? null : uimg,
+      _version: selbrd._version + 1
+    }
+  }
+  API.graphql(graphqlOperation(updateBoard,data)).then(()=> {
+    alert("メッセージを更新しました。");
+  });
+}
+
+
+
+
+リスト6-28
+export const deleteBoard = /* GraphQL */ `
+  mutation DeleteBoard(
+    $input: DeleteBoardInput!
+    $condition: ModelBoardConditionInput
+  ) {
+    deleteBoard(input: $input, condition: $condition) {
+      id
+      …略…
+    }
+  }
+`;
+
+
+
+
+リスト6-29
+const onDClick = ()=> {
+  const data = {
+    input:{
+      id: delbrd.id,
+      _version: delbrd._version
+    }
+  }
+  API.graphql(graphqlOperation(deleteBoard,data)).then(()=> {
+    alert("メッセージを削除しました。");
+  });
+}
+
+
+
+
+リスト7-1
+import '@aws-amplify/ui-react/styles.css';
+import { Auth, Storage } from 'aws-amplify';
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import { Header } from './ui-components';
+import { useState, useEffect } from 'react';
+
+
+const func1 = (setContent)=> {
+  setContent(<p>OK.</p>);
+}
+
+
+function Other() {
+  const [content, setContent] = useState("");
+  useEffect(()=> {
+    func1(setContent);
+  },[]);
+  
+  return (
+    <div>
+      <Header className="my-4"/>
+      <p>※これは、新たに利用した表示です。</p>
+      <div className="border border-primary px-3 py-2">
+        {content}
+      </div>
+    </div>
+  );
+}
+
+
+export default withAuthenticator(Other);
+
+
+
+
+リスト7-2
+// import Other from './Other';
+
+
+root.render(
+  <React.StrictMode>
+    <AmplifyProvider>
+      <Other />
+    </AmplifyProvider>
+  </React.StrictMode>
+);
+
+
+
+
+リスト7-3
+const func1 = (setContent)=> {
+  const opt = {
+    level:'public',
+  }
+  Storage.get("sample.txt", opt).then(value=>{
+    setContent(value);
+  }); 
+}
+
+
+
+
+リスト7-4
+const func1 = (setContent)=> {
+  const opt = {
+    level:'public',
+  }
+  Storage.get("sample.jpg", opt).then(value=>{
+    setContent(<img width="300px" height="300px" src={value} />);
+  }); 
+}
+
+
+
+
+リスト7-5
+const func1 = (setContent)=> {
+  const opt = {
+    level:'public',
+    download: true
+  }
+  Storage.get("sample.txt", opt).then(value=>{
+    value.Body.text().then(data => {
+      const arr = data.split('\n');
+      console.log(arr);
+      const res = [];
+      for(let item of arr) {
+        res.push(<li>{item}</li>);
+      }
+      setContent(<ul>{res}</ul>);
+    });
+  }); 
+}
+
+
+
+
+リスト7-6
+function Other() {
+  const [content, setContent] = useState("");
+  const [fname, setFname] = useState("");
+  const [msg, setMsg] = useState("");
+  useEffect(()=> {
+    func1(setContent,fname,setFname,msg,setMsg);
+  },[fname, msg]);
+  
+  return (…略…);
+}
+
+
+
+
+リスト7-7
+const func1 = (setContent,fname,setFname,msg,setMsg)=> {
+  const onFnameChange = (event)=> {
+    setFname(event.target.value);
+  }
+  const onMsgChange = (event)=> {
+    setMsg(event.target.value);
+  }
+  const onClick = (event)=> {
+    const opt = {
+      level:'protected'
+    }
+    const name = fname.indexOf('.') === -1 ? fname + ".txt" : fname;
+    Storage.put(name, msg, opt).then(value=> {
+      alert(name + " を保存しました。");
+    });
+  }
+
+
+  setContent(
+    <div>
+      <input type="text" className="form-control my-2" 
+        onChange={onFnameChange} />
+      <textarea className="form-control my-2" rows="3" 
+        onChange={onMsgChange}></textarea>
+      <button className="btn btn-primary my-2 text-center" 
+        onClick={onClick}>Click</button>
+    </div>
+  );
+}
+
+
+
+
+リスト7-8
+const func1 = (setContent)=> {
+  const opt = {
+    level:'protected'
+  }
+  Storage.list("", opt).then(values=> {
+    const data = [];
+    for(let item of values) {
+      data.push(
+        <li key={item.eTag} className="list-group-item">
+          {item.key} (size: {item.size})</li>
+      );
+    }
+    setContent(
+      <div>
+        <h5 className="text-center">
+          「protected」のファイル</h5>
+        <ul className="list-group my-2">
+          {data}
+        </ul>
+      </div>
+    );
+  });
+}
+
+
+
+
+リスト7-9
+const func1 = (setContent,fname,setFname)=> {
+  const onSelChange = (event)=> {
+    setFname(event.target.value);
+  }
+  const onBtnClick = ()=> {
+    const opt = {
+      level:'protected'
+    }
+    Storage.remove(fname, opt).then(values=> {
+      alert(fname + " を削除しました。");
+    });
+  }
+  const opt = {
+    level:'protected',
+    download: true
+  }
+  Storage.list("", opt).then(values=> {
+    console.log(values);
+    const data = [];
+    for(let item of values) {
+      data.push(
+        <option key={item.eTag} value={item.key}>
+          {item.key}</option>
+      );
+    }
+    setContent(
+      <div>
+        <h5 className="text-center">
+          「protected」のファイル</h5>
+        <select className="form-control my-2"
+          onChange={onSelChange}>
+          {data}
+        </select>
+        <button className="btn btn-primary text-center"
+          onClick={onBtnClick}>
+          Click
+        </button>
+      </div>
+    );
+  });
+}
+
+
+
+
+リスト7-10
+/* Amplify Params - DO NOT EDIT
+  API_SAMPLEAPP_BOARDTABLE_ARN
+  API_SAMPLEAPP_BOARDTABLE_NAME
+  API_SAMPLEAPP_GRAPHQLAPIENDPOINTOUTPUT
+  API_SAMPLEAPP_GRAPHQLAPIIDOUTPUT
+  API_SAMPLEAPP_GRAPHQLAPIKEYOUTPUT
+  API_SAMPLEAPP_PERSONTABLE_ARN
+  API_SAMPLEAPP_PERSONTABLE_NAME
+  ENV
+  REGION
+  STORAGE_S3SAMPLEAPPSTORAGE3EA3EE3F_BUCKETNAME
+Amplify Params - DO NOT EDIT */
+
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+exports.handler = async (event) => {
+    console.log(`EVENT: ${JSON.stringify(event)}`);
+    return {
+        statusCode: 200,
+    //  Uncomment below to enable CORS requests
+    //  headers: {
+    //      "Access-Control-Allow-Origin": "*",
+    //      "Access-Control-Allow-Headers": "*"
+    //  }, 
+        body: JSON.stringify('Hello from Lambda!'),
+    };
+};
+
+
+
+
+リスト7-11
+{
+  "key1": "value1",
+  "key2": "value2",
+  "key3": "value3"
+}
+
+
+
+
+リスト7-12
+{
+  "statusCode": 200,
+  "body": "\"Hello from Lambda!\""
+}
+
+
+
+
+リスト7-13
+const api_url = "…API GatewayのURL…";
+
+
+const func1 = (setContent,fname,setFname,msg,setMsg)=> {
+  fetch(api_url)
+    .then(resp=>resp.json())
+    .then(result=>{
+      setMsg(result)
+    setContent(
+      <div>
+        <h5 className="text-center">
+          [Lambda result]</h5>
+        <ul className="list-group my-2">
+          {msg}
+        </ul>
+      </div>
+    );
+  });
+}
+
+
+
+
+リスト7-14
+exports.handler = async (event) => {
+    console.log(`EVENT: ${JSON.stringify(event)}`);
+    return {
+        statusCode: 200,
+         headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*"
+        }, 
+        body: JSON.stringify('Hello from Lambda! これは、Lambdaで作ったFunctionです。'),
+    };
+};
+
+
+
+
+リスト7-15
+const AWS = require("aws-sdk");
+const table = "…Boardテーブル名…"; //☆
+
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+exports.handler = async(event) => {
+    const dynamo = new AWS.DynamoDB.DocumentClient();
+    const data = await dynamo.scan({ TableName:table }).promise();
+    return {
+        statusCode: 200,
+         headers: {
+            "Access-Control-Allow-Origin": "*",
+            "Access-Control-Allow-Headers": "*"
+        }, 
+        body: JSON.stringify(data),
+    };
+};
+
+
+
+
+リスト7-16
+const func1 = (setContent)=> {
+  fetch(api_url)
+    .then(resp=>resp.json())
+    .then(result=>{
+      const data = [];
+      for(let item of result.Items) {
+        data.push(
+          <li key={item.id} className="list-group-item">
+            {item.message}（{item.name}）
+          </li>
+        );
+      }
+      setContent(
+        <div>
+          <h5 className="text-center">
+            [Lambda result]</h5>
+          <ul className="list-group my-2">
+            {data}
+          </ul>
+        </div>
+      );
+    });
+}
+
+
+
+
+リスト7-17
+const AWS = require("aws-sdk");
+const backet = "…バケット名…"; //☆
+
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+exports.handler = async(event) => {
+  var s3 = new AWS.S3();
+  
+  let param = {
+    Bucket : backet
+  };
+  const res = await s3.listObjects(param).promise();
+  return {
+    statusCode: 200,
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*"
+    }, 
+    body: JSON.stringify(res),
+  };
+};
+
+
+
+
+リスト7-18
+const func1 = (setContent)=> {
+  fetch(api_url)
+    .then(resp=>resp.json())
+    .then(result=>{
+      console.log(result);
+      const data = [];
+      for(let item of result.Contents) {
+        const path = item.Key.split('/');
+        const fname = path[path.length - 1] == '' 
+          ? path[path.length - 2] + '/' 
+          : path[path.length - 1];
+        data.push(
+          <li key={item.Key} className="list-group-item">
+            {fname}（size:{item.Size}）
+          </li>
+        );
+      }
+      setContent(
+        <div>
+          <h5 className="text-center">
+            [Lambda result]</h5>
+          <ul className="list-group my-2">
+            {data}
+          </ul>
+        </div>
+      );
+    });
+}
+
+
+
+
+リスト7-19
+const AWS = require("aws-sdk");
+const backet = "…バケット名…";
+
+
+/**
+ * @type {import('@types/aws-lambda').APIGatewayProxyHandler}
+ */
+
+
+exports.handler = async(event) => {
+  var s3 = new AWS.S3();
+  const fname = event.queryStringParameters['file'] == ""
+    ? 'sample.txt' : event.queryStringParameters['file'];
+
+
+  let param = {
+    Bucket : backet,
+    Key: "public/" + fname
+  };
+  const res = await s3.getObject(param).promise();
+
+
+  return {
+    statusCode: 200,
+    headers: {
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*"
+    }, 
+    body: JSON.stringify(new String(res.Body))
+  };
+};
+
+
+
+
+リスト7-20
+const func1 = (setContent, fname, setFname, msg, setMsg)=> {
+  const onFChange = (event)=> {
+    setFname(event.target.value);
+  }
+  const onBClick = (event)=> {
+    fetch(api_url + '?file=' + fname)
+      .then(resp=>resp.json())
+      .then(result=>{
+        setMsg(result);
+      });
+  }
+  setContent(
+    <div>
+      <input type="text" className="form-control mt-2"
+        onChange={onFChange} />
+      <button className="btn btn-primary my-2"
+        onClick={onBClick}>
+        Click
+      </button>
+      <h6>[Lambda result]</h6>
+      <pre className="border borer-primary p-2 my-2">
+        {msg}
+      </pre>
+    </div>
+  );
+}
+
+
+
+
+リスト8-1
+{
+  "name": "sample-amplify-js-app",
+  "version": "1.0.0",
+  "description": "Amplify JavaScript Sample Application",
+  "dependencies": {
+    "aws-amplify": "latest"
+  },
+  "devDependencies": {
+    "copy-webpack-plugin": "^6.1.0",
+    "webpack": "^5.70.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
+  },
+  "scripts": {
+    "start": "webpack && webpack-dev-server --mode development",
+    "build": "webpack"
+  }
+}
+
+
+
+
+リスト8-2
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
+const path = require('path');
+
+
+module.exports = {
+  mode: 'development',
+  entry: './src/app.js',
+  output: {
+    filename: '[name].bundle.js',
+    path: path.resolve(__dirname, 'dist')
+  },
+  module: {
+    rules: [
+      { 
+        test: /\.js$/,
+        exclude: /node_modules/
+      },
+    ]
+  },
+  devServer: {
+    client: {
+      overlay: true
+    },
+    hot: true,
+    watchFiles: ['src/*', 'index.html']
+  },
+  plugins: [
+    new CopyWebpackPlugin({
+      patterns: ['index.html']
+    }),
+    new webpack.HotModuleReplacementPlugin()
+  ]
+};
+
+
+
+
+リスト8-3
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Amplify Framework</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" 
+      rel="stylesheet" />
+  </head>
+
+
+  <body class="container">
+    <h1 class="bg-primary text-white px-3 py-2">Sample JS App</h1>
+    <p id="message" class="my-4">これは、
+      サンプルで作成したアプリケーションです。</p>
+    <div id="content" class="border border-primary p-3">
+      Sample content...
+    </div>
+    <script src="main.bundle.js"></script>
+  </body>
+</html>
+
+
+
+
+リスト8-4
+<div id="content" class="border border-primary p-3">
+  <input type="text" id="username" class="form-control my-2"
+    placeholder="account" />
+  <input type="password" id="password" class="form-control my-2"
+    placeholder="password" />
+  <button id="submitbtn" class="btn btn-primary my-2">Sign in</button>  
+</div>
+
+
+
+
+リスト8-5
+import awsconfig from './aws-exports';
+import { Amplify, Auth } from 'aws-amplify';
+
+
+Amplify.configure(awsconfig);
+
+
+const content_el = document.querySelector('#content');
+const message_el = document.querySelector('#message');
+const username_el = document.querySelector('#username');
+const password_el = document.querySelector('#password');
+const submitbtn_el = document.querySelector('#submitbtn');
+
+
+submitbtn_el.addEventListener('click',(e)=>signIn());
+
+
+const auth_content = `
+  <h2>Sign-in Contnt!</h2>
+  <p class="alert alert-primary">
+  これは、サインインしたときだけ表示されるコンテンツです。
+  </p>
+`;
+
+
+function setAuthContent() {
+  message_el.textContent = '※サインインしました。';
+  content_el.innerHTML = auth_content;
+}
+
+
+async function signIn() {
+  const username = username_el.value;
+  const password = password_el.value;
+
+
+  Auth.signIn(username, password)
+    .then(user => {
+      if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+        const newpass = prompt('新しいパスワードを入力して下さい：');
+        Auth.completeNewPassword(user,newpass).then(user => {
+          setAuthContent();
+        }).catch(e => {
+          console.log(e);
+          message_el.textContent = e.message;
+        });
+      } else {
+        setAuthContent();
+      }
+    }).catch(e => {
+      console.log(e);
+      message_el.textContent = e.message;
+    });
+}
+
+
+
+
+リスト8-6
+<div class="text-center">
+  <button id="signOutBtn" class="btn">Sign-Out</button>
+</div>
+
+
+
+
+リスト8-7
+window.addEventListener('load',(e)=>checkSignIn());
+document.querySelector('#signOutBtn')
+  .addEventListener('click', (e)=>signOut());
+
+
+function checkSignIn() {
+  Auth.currentAuthenticatedUser().then(usr=>{
+    setAuthContent();
+  }).catch((e)=> {
+    console.log(e.message);
+  });
+}
+
+
+function signOut() {
+  Auth.signOut().then(val=> {
+    location.reload();   
+  });
+}
+
+
+
+
+リスト8-8
+import { Amplify, Auth, DataStore, Predicates, SortDirection } from 'aws-amplify';
+import { Message } from './models';
+
+
+
+
+リスト8-9
+async function setAuthContent() {
+  message_el.textContent = '※サインインしました。';
+  content_el.innerHTML = await getMessages();
+}
+
+
+async function getMessages() {
+  const values = await DataStore.query(Message, Predicates.ALL, {
+      sort:ob=> ob.createdAt(SortDirection.DESCENDING)
+    }
+  );
+  let list = '<h5 class="text-center">Message</h5>';
+  for (let item of values) {
+    list += '<li class="list-group-item">' + item.message + '（' + item.name + '）</li>';
+  }
+  return '<ul class="list-group">' + list + '</ul>';
+}

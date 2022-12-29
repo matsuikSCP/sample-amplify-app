@@ -3,14 +3,14 @@ import "./App.css";
 // スタイルシートをインポート
 import "@aws-amplify/ui-react/styles.css";
 //  Amplify本体のオブジェクト、サインアウト用のAuthオブジェクト
-import { Amplify, Auth, DataStore } from "aws-amplify";
+import { Amplify, Auth, DataStore, Predicates, SortDirection } from "aws-amplify";
 // UI関係のモジュールからwithAuthenticator関数をインポート
 import { withAuthenticator } from "@aws-amplify/ui-react";
 // 自動生成される情報をインポート
 import aws_exports from "./aws-exports";
 import { Header, BoardComponent, BoardComponentCollection } from "./ui-components";
 import { useState, useEffect } from "react";
-import { Board } from "./models";
+import { Board, Person } from "./models";
 
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
@@ -21,7 +21,7 @@ const content3 = <p>タブ3のコンテンツ</p>;
 const content4 = <p>タブ4のコンテンツ</p>;
 
 function App() {
-  const [content1, setContent1] = useState("Test");
+  const [content1, setContent1] = useState("");
   const [input, setInput] = useState("");
   const [find, setFind] = useState(input);
   const doChange = (event) => {
@@ -31,25 +31,8 @@ function App() {
     setFind(input);
   };
   useEffect(() => {
-    DataStore.query(Board, (ob) => ob.name("contains", find)).then((values) => {
-      const data = [];
-      for (let item of values) {
-        data.push(<BoardComponent board={item} key={item.id} />);
-      }
-      setContent1(
-        <div>
-          <div className="mx-0 my-3 row">
-            <input type="text" className="form-control col" onChange={doChange} />
-            <button className="btn btn-primary col-2" onClick={doFilter}>
-              Click
-            </button>
-          </div>
-          {data}
-        </div>
-      );
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [input, find]);
+    ListBoard(input, setContent1, doChange);
+  }, [input]);
 
   return (
     <div className="py-4">
@@ -100,6 +83,24 @@ function App() {
       </p>
     </div>
   );
+}
+
+function ListBoard(input, setContent1, doChange) {
+  DataStore.query(Board, Predicates.ALL, { sort: (ob) => ob.createdAt(SortDirection.DESCENDING), page: 0, limit: 100 }).then((values) => {
+    const data = [];
+    for (let item of values) {
+      DataStore.query(Person, (ob) => ob.id.eq(item.personID)).then((value) => {
+        data.push(
+          <div key={item.id}>
+            <BoardComponent board={item} />
+            <p className="text-end">posted by {value[0].email}.</p>
+          </div>
+        );
+        console.log(data);
+        setContent1(<div>{data}</div>);
+      });
+    }
+  });
 }
 
 function Now() {
