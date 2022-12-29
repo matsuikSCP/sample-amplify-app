@@ -48,7 +48,7 @@ function App() {
   const [seldata, setSeldata] = useState([]);
   const [selbrd, setSelbrd] = useState(null);
   useEffect(() => {
-    CreateBoard(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd);
+    func3(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd);
   }, [content1, umsg, uimg, selbrd, seldata]);
 
   return (
@@ -59,7 +59,7 @@ function App() {
       <hr />
       <ul className="nav nav-tabs">
         <li className="nav-item">
-          <a href="#tab1" className="nav-link active" data-bs-toggle="tab">
+          <a href="#tab1" className="nav-link" data-bs-toggle="tab">
             List
           </a>
         </li>
@@ -69,7 +69,7 @@ function App() {
           </a>
         </li>
         <li className="nav-item">
-          <a href="#tab3" className="nav-link" data-bs-toggle="tab">
+          <a href="#tab3" className="nav-link active" data-bs-toggle="tab">
             Update
           </a>
         </li>
@@ -80,13 +80,13 @@ function App() {
         </li>
       </ul>
       <div className="tab-content">
-        <div id="tab1" className="my-2 tab-pane active">
+        <div id="tab1" className="my-2 tab-pane">
           {content1}
         </div>
         <div id="tab2" className="my-2 tab-pane">
           {content2}
         </div>
-        <div id="tab3" className="my-2 tab-pane">
+        <div id="tab3" className="my-2 tab-pane active">
           {content3}
         </div>
         <div id="tab4" className="my-2 tab-pane">
@@ -173,6 +173,83 @@ function CreateBoard(setContent2, fmsg, femail, fimg, setFmsg, setFemail, setFim
         </div>
         <div className="mb-2 text-center">
           <button className="btn btn-primary" onClick={onClick}>
+            Click
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function func3(setContent3, seldata, setSeldata, umsg, uimg, setUmsg, setUimg, selbrd, setSelbrd) {
+  const onUMsgChange = (event) => {
+    const v = event.target.value;
+    setUmsg(v);
+  };
+  const onUImgChange = (event) => {
+    const v = event.target.value;
+    setUimg(v);
+  };
+  const onSelChange = (event) => {
+    const v = event.target.value;
+    DataStore.query(Board, (ob) => ob.id.eq(v)).then((value) => {
+      if (value.length != 1) {
+        alert("見つかりませんでした。");
+        return;
+      }
+      setSelbrd(value[0]);
+      setUmsg(value[0].message);
+      setUimg(value[0].image);
+    });
+  };
+
+  const onUClick = () => {
+    DataStore.save(
+      Board.copyOf(selbrd, (updated) => {
+        updated.message = umsg;
+        updated.image = uimg == "" ? null : uimg;
+      })
+    ).then(() => {
+      alert("メッセージを更新しました。");
+    });
+  };
+  const data = [
+    <option key="nodata" vaue="-">
+      -
+    </option>,
+  ];
+  DataStore.query(Board, Predicates.ALL, { sort: (ob) => ob.createdAt(SortDirection.DESCENDING), limit: 5 }).then((values) => {
+    for (let item of values) {
+      data.push(
+        <option key={item.id} value={item.id}>
+          {item.message}
+        </option>
+      );
+    }
+    setSeldata(data);
+  });
+
+  setContent3(
+    <div>
+      <h3>Update new Board</h3>
+      <select className="form-select" onChange={onSelChange}>
+        {seldata}
+      </select>
+      <div className="alert alert-primary my-3">
+        <div className="mb-2">
+          <label htmlFor="edit_message" className="col-form-label">
+            Message
+          </label>
+          <input type="text" className="form-control" value={umsg} id="edit_message" onChange={onUMsgChange} />
+        </div>
+        <div className="mb-2">
+          <label htmlFor="edit_image" className="col-form-label">
+            Image(URL)
+          </label>
+          <input type="text" className="form-control" value={uimg} id="edit_image" onChange={onUImgChange} />
+        </div>
+        <div className="mb-2 text-center">
+          <button className="btn btn-primary" onClick={onUClick}>
             Click
           </button>
         </div>
