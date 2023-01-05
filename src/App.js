@@ -109,8 +109,8 @@ function App() {
 }
 
 function ListBoard(input, setContent1, doChange) {
-  const opt = { filter: { _deleted: { eq: true } } };
-  API.graphql(graphqlOperation(listBoards, opt)).then((values) => {
+  const opt = { filter: { name: { ne: true } } };
+  API.graphql(graphqlOperation(listBoards)).then((values) => {
     const data = values.data.listBoards.items;
     const arr = [];
     for (let item of data) {
