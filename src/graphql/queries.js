@@ -106,9 +106,9 @@ export const listBoards = /* GraphQL */ `
         personID
         createdAt
         updatedAt
-        # _version
-        # _deleted
-        # _lastChangedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
       nextToken
       startedAt
