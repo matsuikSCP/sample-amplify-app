@@ -3,7 +3,7 @@ import "./App.css";
 // スタイルシートをインポート
 import "@aws-amplify/ui-react/styles.css";
 //  Amplify本体のオブジェクト、サインアウト用のAuthオブジェクト
-import { Amplify, Auth, DataStore, Predicates, SortDirection } from "aws-amplify";
+import { Amplify, Auth, DataStore, Predicates, SortDirection, API, graphqlOperation } from "aws-amplify";
 // UI関係のモジュールからwithAuthenticator関数をインポート
 import { withAuthenticator } from "@aws-amplify/ui-react";
 // 自動生成される情報をインポート
@@ -11,6 +11,7 @@ import aws_exports from "./aws-exports";
 import { Header, BoardComponent, BoardComponentCollection } from "./ui-components";
 import { useState, useEffect } from "react";
 import { Board, Person } from "./models";
+import { listPeople, listBoards } from "./graphql/queries";
 
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
@@ -63,7 +64,7 @@ function App() {
       <hr />
       <ul className="nav nav-tabs">
         <li className="nav-item">
-          <a href="#tab1" className="nav-link" data-bs-toggle="tab">
+          <a href="#tab1" className="nav-link active" data-bs-toggle="tab">
             List
           </a>
         </li>
@@ -73,7 +74,7 @@ function App() {
           </a>
         </li>
         <li className="nav-item">
-          <a href="#tab3" className="nav-link active" data-bs-toggle="tab">
+          <a href="#tab3" className="nav-link" data-bs-toggle="tab">
             Update
           </a>
         </li>
@@ -84,13 +85,13 @@ function App() {
         </li>
       </ul>
       <div className="tab-content">
-        <div id="tab1" className="my-2 tab-pane">
+        <div id="tab1" className="my-2 tab-pane active">
           {content1}
         </div>
         <div id="tab2" className="my-2 tab-pane">
           {content2}
         </div>
-        <div id="tab3" className="my-2 tab-pane active">
+        <div id="tab3" className="my-2 tab-pane">
           {content3}
         </div>
         <div id="tab4" className="my-2 tab-pane">
@@ -107,23 +108,13 @@ function App() {
 }
 
 function ListBoard(input, setContent1, doChange) {
-  DataStore.query(Board, Predicates.ALL, {
-    sort: (ob) => ob.createdAt(SortDirection.DESCENDING),
-    page: 0,
-    limit: 100,
-  }).then((values) => {
-    const data = [];
-    for (let item of values) {
-      DataStore.query(Person, (ob) => ob.id.eq(item.personID)).then((value) => {
-        data.push(
-          <div key={item.id}>
-            <BoardComponent board={item} />
-            <p className="text-end">posted by {value[0].email}.</p>
-          </div>
-        );
-        setContent1(<div>{data}</div>);
-      });
+  API.graphql(graphqlOperation(listBoards)).then((values) => {
+    const data = values.data.listBoards.items;
+    const arr = [];
+    for (let item of data) {
+      arr.push(<BoardComponent board={item} key={item.id} />);
     }
+    setContent1(<div>{arr}</div>);
   });
 }
 
