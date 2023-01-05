@@ -1,0 +1,14 @@
+{
+  "resourceName": "s3sampleappstorage2a25bcad",
+  "bucketName": "sample-app-storage-2a25bcad",
+  "policyUUID": "81e37bf8",
+  "storageAccess": "authAndGuest",
+  "guestAccess": [
+    "READ"
+  ],
+  "authAccess": [
+    "CREATE_AND_UPDATE",
+    "DELETE",
+    "READ"
+  ]
+}
