@@ -12,6 +12,7 @@ import { Header, BoardComponent, BoardComponentCollection } from "./ui-component
 import { useState, useEffect } from "react";
 import { Board, Person } from "./models";
 import { listPeople, listBoards } from "./graphql/queries";
+import { createBoard, updateBoard, deleteBoard } from "./graphql/mutations";
 
 // 設定情報を反映（バックエンドとうまくやり取りするためのもの）
 Amplify.configure(aws_exports);
@@ -132,18 +133,22 @@ function CreateBoard(setContent2, fmsg, femail, fimg, setFmsg, setFemail, setFim
     setFimg(v);
   };
   const onClick = () => {
-    DataStore.query(Person, (ob) => ob.email.eq(femail)).then((value) => {
-      if (value.length != 1) {
+    const opt = { filter: { email: { eq: femail } } };
+    API.graphql(graphqlOperation(listPeople, opt)).then((value) => {
+      const values = value.data.listPeople.items;
+      if (values.length != 1) {
         alert("アカウントが見つかりません。");
         return;
       }
-      const bd = new Board({
-        message: fmsg,
-        name: value[0].name,
-        image: fimg == "" ? null : fimg,
-        personID: value[0].id,
-      });
-      DataStore.save(bd).then(() => {
+      const data = {
+        input: {
+          message: fmsg,
+          name: values[0].name,
+          image: fimg == "" ? null : fimg,
+          personID: values[0].id,
+        },
+      };
+      API.graphql(graphqlOperation(createBoard, data)).then(() => {
         alert("メッセージを投稿しました。");
       });
     });
