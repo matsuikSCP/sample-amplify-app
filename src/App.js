@@ -109,7 +109,7 @@ function App() {
 }
 
 function ListBoard(input, setContent1, doChange) {
-  const opt = { filter: { _deleted: { ne: true } } };
+  const opt = { filter: { deleted: { ne: true } } };
   API.graphql(graphqlOperation(listBoards)).then((values) => {
     const data = values.data.listBoards.items;
     const arr = [];
@@ -278,9 +278,13 @@ function DeleteBoard(setContent4, deldata, setDeldata, delbrd, setDelbrd) {
     });
   };
   const onDClick = () => {
-    DataStore.delete(delbrd).then(() => {
+    const data = { input: { id: delbrd.id, _version: delbrd._version } };
+    API.graphql(graphqlOperation(deleteBoard, data)).then(() => {
       alert("データを削除しました。");
     });
+    // DataStore.delete(delbrd).then(() => {
+    //   alert("データを削除しました。");
+    // });
   };
 
   const data = [
