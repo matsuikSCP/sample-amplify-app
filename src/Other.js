@@ -4,24 +4,6 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import { Header } from "./ui-components";
 import { useState, useEffect } from "react";
 
-const func1 = (setContent) => {
-  const opt = {
-    level: "public",
-    download: true,
-  };
-  Storage.get("sample.txt", opt).then((value) => {
-    value.Body.text().then((data) => {
-      const arr = data.split("\n");
-      const res = [];
-      for (let item of arr) {
-        res.push(<li>{item}</li>);
-      }
-      setContent(<ul>{res}</ul>);
-    });
-    // setContent(<img width="300px" height="200px" src={value} />);
-  });
-};
-
 function Other() {
   const [content, setContent] = useState("");
   const [fname, setFname] = useState("");
@@ -37,5 +19,32 @@ function Other() {
     </div>
   );
 }
+
+const func1 = (setContent, fname, setFname, msg, setMsg) => {
+  const onFnameChange = (event) => {
+    setFname(event.target.value);
+  };
+  const onMsgChange = (event) => {
+    setMsg(event.target.value);
+  };
+  const onClick = (event) => {
+    const opt = {
+      level: "protected",
+    };
+    const name = fname.indexOf(".") === -1 ? fname + ".txt" : fname;
+    Storage.put(name, msg, opt).then((value) => {
+      alert(name + "を保存しました");
+    });
+  };
+  setContent(
+    <div>
+      <input type="text" className="form-control my-2" onChange={onFnameChange} />
+      <textarea className="form-control my-2" onChange={onMsgChange} />
+      <button className="btn btn-primary my-2 text-center" onClick={onClick}>
+        保存
+      </button>
+    </div>
+  );
+};
 
 export default withAuthenticator(Other);
