@@ -21,10 +21,10 @@ function Other() {
   }, [rmfname]);
   return (
     <div>
-      <Header className="my-4" />
-      <p>*これは新たに利用した表示です。</p>
-      <div className="border border-primary px-3 py-2">{content1}</div>
-      <div className="border border-primary px-3 py-2">{content2}</div>
+      {/* <Header className="my-4" /> */}
+      <h3>S3と連携した機能</h3>
+      <div className="border border-primary px-3 py-2 my-1">{content1}</div>
+      <div className="border border-primary px-3 py-2 my-1">{content2}</div>
     </div>
   );
 }

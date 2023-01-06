@@ -20,6 +20,12 @@
       },
       "storage": {
         "s3sampleappstorage2a25bcad": {}
+      },
+      "function": {
+        "sampleappbook": {
+          "deploymentBucketName": "amplify-sampleapp-staging-54808-deployment",
+          "s3Key": "amplify-builds/sampleappbook-5166634e44515a4b5470-build.zip"
+        }
       }
     }
   }

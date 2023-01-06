@@ -57,5 +57,37 @@
       "providerPlugin": "awscloudformation",
       "service": "S3"
     }
+  },
+  "function": {
+    "sampleappbook": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "Sampleapp",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "Sampleapp",
+          "attributes": [
+            "UserPoolId"
+          ]
+        },
+        {
+          "category": "storage",
+          "resourceName": "s3sampleappstorage2a25bcad",
+          "attributes": [
+            "BucketName"
+          ]
+        }
+      ]
+    }
   }
 }

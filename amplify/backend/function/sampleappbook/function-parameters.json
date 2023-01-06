@@ -1,0 +1,39 @@
+{
+  "permissions": {
+    "api": {
+      "Sampleapp": [
+        "Query",
+        "Mutation"
+      ]
+    },
+    "auth": {
+      "Sampleapp": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    },
+    "storage": {
+      "s3sampleappstorage2a25bcad": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Person:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ],
+      "Board:@model(appsync)": [
+        "create",
+        "read",
+        "update",
+        "delete"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}
