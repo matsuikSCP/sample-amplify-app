@@ -15,6 +15,9 @@ root.render(
     <AmplifyProvider>
       <App />
     </AmplifyProvider>
+    <AmplifyProvider>
+      <Other />
+    </AmplifyProvider>
   </React.StrictMode>
 );
 

@@ -17,6 +17,9 @@
       },
       "api": {
         "Sampleapp": {}
+      },
+      "storage": {
+        "s3sampleappstorage2a25bcad": {}
       }
     }
   }
